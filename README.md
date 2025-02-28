@@ -42,12 +42,11 @@ An advanced AI chatbot system capable of storing and recalling user history, pro
 ## 🚀 Setup & Installation
 
 ### Prerequisites
-
 - Python 3.9+
-- Node.js 16+
-- PostgreSQL
-- Redis
-- Docker (optional for containerized deployment)
+- Node.js 16+ (for frontend development)
+- Docker (recommended for containerized deployment)
+- Redis (for caching)
+- Optional: PostgreSQL (database can be run via Docker)
 
 ### Backend Installation
 
@@ -207,11 +206,15 @@ npm test
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## 👨‍💻 About the Developer
 
-Developed by Murat Yigit Artuk
+**Murat Yigit Artuk**
+- 🎓 Aspiring Software Engineering Student
+- 🌟 Passionate about Artificial Intelligence, Cloud Computing, and Innovative Technologies
+- 🚀 Seeking opportunities in cutting-edge software development
+- 📍 Targeting Deutsche Telekom Duales Studium Informatik Program
 
 ## 📬 Contact
 
 - GitHub: [muratyigitartuk](https://github.com/muratyigitartuk)
-- G-Mail: [muratyigitartuk0@gmail.com]
+- Email: [muratyigitartuk0@gmail.com](mailto:muratyigitartuk0@gmail.com)
