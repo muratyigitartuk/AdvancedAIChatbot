@@ -24,7 +24,8 @@ import io
 import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import status
-from app.services.voice.voice_service import VoiceService
+# Removing unused import
+# from app.services.voice.voice_service import VoiceService
 
 
 @patch("app.api.voice.VoiceServiceFactory")
