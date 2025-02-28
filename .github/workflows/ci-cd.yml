@@ -57,6 +57,7 @@ jobs:
         DB_PASSWORD: testpassword
         REDIS_HOST: localhost
         REDIS_PORT: 6379
+        PYTHONPATH: .
       run: |
         pytest tests/
     
