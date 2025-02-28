@@ -25,104 +25,143 @@ from fastapi import status
 from sqlalchemy.orm import Session
 from app.core.auth import AuthConfig
 
+
 def test_register_user(client):
-    """Test registering a new user"""
+    """Test registering a new user."""
     response = client.post(
         "/api/auth/register",
         json={
             "username": "newuser",
             "email": "newuser@example.com",
             "password": "secure_password",
-            "full_name": "New User"
-        }
+            "full_name": "New User",
+        },
     )
-    
-    assert response.status_code == status.HTTP_200_OK
+
+    if response.status_code != status.HTTP_200_OK:
+        raise AssertionError("Expected status code 200 OK")
+
     data = response.json()
-    assert data["username"] == "newuser"
-    assert data["email"] == "newuser@example.com"
-    assert data["full_name"] == "New User"
-    assert "id" in data
-    assert "hashed_password" not in data
+
+    if data["username"] != "newuser":
+        raise AssertionError("Username mismatch")
+
+    if data["email"] != "newuser@example.com":
+        raise AssertionError("Email mismatch")
+
+    if data["full_name"] != "New User":
+        raise AssertionError("Full name mismatch")
+
+    if "id" not in data:
+        raise AssertionError("ID missing in response")
+
+    if "hashed_password" in data:
+        raise AssertionError("Hashed password should not be in response")
+
 
 def test_register_existing_username(client, test_user):
-    """Test registering with an existing username"""
+    """Test registering with an existing username."""
     response = client.post(
         "/api/auth/register",
         json={
             "username": "testuser",  # Same as test_user fixture
             "email": "different@example.com",
-            "password": "secure_password"
-        }
+            "password": "secure_password",
+        },
     )
-    
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "already registered" in response.json()["detail"]
+
+    if response.status_code != status.HTTP_400_BAD_REQUEST:
+        raise AssertionError("Expected status code 400 Bad Request")
+
+    if "already registered" not in response.json()["detail"]:
+        raise AssertionError("Expected 'already registered' in error detail")
+
 
 def test_register_existing_email(client, test_user):
-    """Test registering with an existing email"""
+    """Test registering with an existing email."""
     response = client.post(
         "/api/auth/register",
         json={
             "username": "differentuser",
             "email": "test@example.com",  # Same as test_user fixture
-            "password": "secure_password"
-        }
+            "password": "secure_password",
+        },
     )
-    
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "already registered" in response.json()["detail"]
+
+    if response.status_code != status.HTTP_400_BAD_REQUEST:
+        raise AssertionError("Expected status code 400 Bad Request")
+
+    if "already registered" not in response.json()["detail"]:
+        raise AssertionError("Expected 'already registered' in error detail")
+
 
 def test_login_success(client, test_user):
-    """Test successful login"""
+    """Test successful login."""
     response = client.post(
         "/api/auth/token",
-        data={
-            "username": "testuser",
-            "password": "password123"
-        },
-        headers={"Content-Type": "application/x-www-form-urlencoded"}
+        data={"username": "testuser", "password": "password123"},
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-    
-    assert response.status_code == status.HTTP_200_OK
+
+    if response.status_code != status.HTTP_200_OK:
+        raise AssertionError("Expected status code 200 OK")
+
     data = response.json()
-    assert "access_token" in data
-    assert data["token_type"] == "bearer"
-    assert data["username"] == "testuser"
+
+    if "access_token" not in data:
+        raise AssertionError("Access token missing in response")
+
+    if data["token_type"] != "bearer":
+        raise AssertionError("Token type should be 'bearer'")
+
+    if data["username"] != "testuser":
+        raise AssertionError("Username mismatch")
+
 
 def test_login_wrong_password(client, test_user):
-    """Test login with wrong password"""
+    """Test login with wrong password."""
     response = client.post(
         "/api/auth/token",
-        data={
-            "username": "testuser",
-            "password": "wrong_password"
-        },
-        headers={"Content-Type": "application/x-www-form-urlencoded"}
+        data={"username": "testuser", "password": "wrong_password"},
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-    
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    assert "Incorrect username or password" in response.json()["detail"]
+
+    if response.status_code != status.HTTP_401_UNAUTHORIZED:
+        raise AssertionError("Expected status code 401 Unauthorized")
+
+    if "Incorrect username or password" not in response.json()["detail"]:
+        raise AssertionError("Expected 'Incorrect username or password' in error detail")
+
 
 def test_get_current_user(client, test_user_token):
-    """Test getting current user profile"""
+    """Test getting current user profile."""
     response = client.get(
-        "/api/auth/me",
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        "/api/auth/me", headers={"Authorization": f"Bearer {test_user_token}"}
     )
-    
-    assert response.status_code == status.HTTP_200_OK
+
+    if response.status_code != status.HTTP_200_OK:
+        raise AssertionError("Expected status code 200 OK")
+
     data = response.json()
-    assert data["username"] == "testuser"
-    assert data["email"] == "test@example.com"
-    assert data["full_name"] == "Test User"
+
+    if data["username"] != "testuser":
+        raise AssertionError("Username mismatch")
+
+    if data["email"] != "test@example.com":
+        raise AssertionError("Email mismatch")
+
+    if data["full_name"] != "Test User":
+        raise AssertionError("Full name mismatch")
+
 
 def test_get_current_user_invalid_token(client):
-    """Test getting current user with invalid token"""
+    """Test getting current user with invalid token."""
     response = client.get(
-        "/api/auth/me",
-        headers={"Authorization": "Bearer invalid_token"}
+        "/api/auth/me", headers={"Authorization": "Bearer invalid_token"}
     )
-    
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    assert "Could not validate credentials" in response.json()["detail"]
+
+    if response.status_code != status.HTTP_401_UNAUTHORIZED:
+        raise AssertionError("Expected status code 401 Unauthorized")
+
+    if "Could not validate credentials" not in response.json()["detail"]:
+        raise AssertionError("Expected 'Could not validate credentials' in error detail")
