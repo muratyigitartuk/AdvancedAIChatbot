@@ -120,17 +120,17 @@ This project represents a learning journey in:
 ### Frontend Installation
 
 1. Navigate to the frontend directory:
-   ```
+   ```bash
    cd frontend
    ```
 
 2. Install dependencies:
-   ```
+   ```bash
    npm install
    ```
 
 3. Start the development server:
-   ```
+   ```bash
    npm start
    ```
 
@@ -212,13 +212,13 @@ advanced-ai-chatbot/
 
 ### Running Backend Tests
 
-```
+```bash
 pytest
 ```
 
 ### Running Frontend Tests
 
-```
+```bash
 cd frontend
 npm test
 ```
