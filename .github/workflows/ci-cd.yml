@@ -139,10 +139,19 @@ jobs:
         pip install bandit
         bandit -r . -f custom
 
-# Optional notification job
   notify:
     needs: [test, build-and-push, code-quality, security-scan]
     runs-on: ubuntu-latest
     if: always()
     steps:
-    # Uncomment and configure if you want Slack notifications
+    - uses: actions/checkout@v3
+    
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        text: Workflow completed
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      if: failure() || success()
