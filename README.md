@@ -172,8 +172,7 @@ Once the application is running, visit `/docs` or `/redoc` for interactive API d
   - `GET /api/recommendations`: Get proactive recommendations
 
 ## 📂 Project Structure
-
-```
+```markdown
 advanced-ai-chatbot/
 ├── app/                      # Backend application
 │   ├── api/                  # API endpoints
@@ -207,6 +206,7 @@ advanced-ai-chatbot/
 ├── docker-compose.yml        # Docker Compose configuration
 ├── Dockerfile                # Docker configuration
 └── README.md                 # Project documentation
+```
 
 ## 🧪 Testing
 
