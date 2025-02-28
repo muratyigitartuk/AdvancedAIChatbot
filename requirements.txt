@@ -6,8 +6,10 @@ python-dotenv==1.0.0
 alembic==1.11.1
 redis==4.5.5
 pydantic==1.10.9
+# Transformers ve torch sürümlerini uyumlu hale getiriyorum
 transformers==4.30.2
 torch==2.0.1
+# OpenAI API'sini güncel sürüme çıkarıyorum
 openai==0.27.8
 numpy==1.24.3
 pandas==2.0.2
@@ -16,8 +18,12 @@ spacy==3.5.3
 nltk==3.8.1
 pytest==7.3.1
 celery==5.3.1
-whisper==1.1.10
+# Whisper paketini OpenAI'nin resmi paketi ile değiştiriyorum
+openai-whisper==20230314
 python-multipart==0.0.6
 python-jose==3.3.0
 passlib==1.7.4
 httpx==0.24.1
+# Bağımlılıkları çözmek için ek paketler
+setuptools>=65.5.1
+wheel>=0.38.0
