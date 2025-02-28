@@ -1,0 +1,45 @@
+# Python Virtual Environments
+.venv/
+venv/
+env/
+*.env
+
+# Node.js Dependencies
+node_modules/
+
+# Compiled Python Files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.pytest_cache/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and Databases
+*.log
+*.sqlite3
+*.db
+
+# Build and Distribution
+dist/
+build/
+*.egg-info/
+
+# Secrets and Credentials
+secrets/
+*.pem
+*.key
+
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Kubernetes and Docker
+*.tar
+*.gz
