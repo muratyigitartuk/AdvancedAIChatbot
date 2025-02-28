@@ -78,9 +78,9 @@ This project represents a learning journey in:
 ### Prerequisites
 - Python 3.9+
 - Node.js 16+
-- Docker
-- Redis
-- Optional: PostgreSQL
+- PostgreSQL 13+
+- Redis (optional, for caching)
+- OpenAI API key
 
 ### Backend Installation
 
@@ -133,6 +133,28 @@ This project represents a learning journey in:
    ```bash
    npm start
    ```
+
+## 🔧 Environment Variables
+
+The application uses the following environment variables:
+
+```
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=chatbot_db
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_api_key
+DEFAULT_MODEL=gpt-3.5-turbo
+
+# Authentication
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
 
 ## 🚢 Deployment
 
@@ -222,6 +244,76 @@ pytest
 cd frontend
 npm test
 ```
+
+## 👨‍💻 Development Workflow
+
+### Code Style and Linting
+
+We follow PEP 8 guidelines for Python code. You can check your code with:
+
+```bash
+flake8 .
+```
+
+### Database Migrations
+
+When changing models, create a new migration:
+
+```bash
+alembic revision --autogenerate -m "Description of changes"
+alembic upgrade head
+```
+
+### Branch Strategy
+
+- `main`: Production-ready code
+- `develop`: Integration branch for features
+- `feature/*`: New features
+- `bugfix/*`: Bug fixes
+
+### Pull Request Process
+
+1. Create a feature/bugfix branch
+2. Make your changes
+3. Run tests and linting
+4. Submit a pull request to the develop branch
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+#### Database Connection Errors
+
+If you encounter database connection issues:
+
+1. Check that PostgreSQL is running
+2. Verify your database credentials in `.env`
+3. Ensure the database exists: `createdb chatbot_db`
+
+#### OpenAI API Issues
+
+If AI responses are not working:
+
+1. Verify your OpenAI API key in `.env`
+2. Check API usage limits on OpenAI dashboard
+3. Ensure internet connectivity
+
+#### JWT Authentication Problems
+
+If authentication is failing:
+
+1. Check that SECRET_KEY is properly set
+2. Verify token expiration settings
+3. Clear browser cookies and try again
+
+## 🚧 Recent Changes
+
+### 2025-02-28: SQLAlchemy Metadata Conflict Resolution
+
+- Renamed 'metadata' column to 'message_metadata' in Message model
+- Updated all references across the codebase
+- Fixed potential naming conflicts with SQLAlchemy's Declarative API
+- Maintained API contract for external interfaces
 
 ## 🔮 Future Enhancements
 
