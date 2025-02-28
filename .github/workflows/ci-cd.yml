@@ -70,7 +70,7 @@ jobs:
       run: |
         cd frontend
         npm test
-
+    
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
@@ -145,11 +145,4 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-    - name: Send notification
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
     # Uncomment and configure if you want Slack notifications
