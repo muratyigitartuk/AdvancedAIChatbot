@@ -3,6 +3,7 @@
 venv/
 env/
 *.env
+!.env.example
 
 # Node.js Dependencies
 node_modules/
@@ -13,12 +14,15 @@ node_modules/
 *.pyd
 __pycache__/
 .pytest_cache/
+*.pytest_cache
 
 # IDE and Editor Files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.bak
+*~
 
 # Logs and Databases
 *.log
@@ -30,15 +34,21 @@ dist/
 build/
 *.egg-info/
 
-# Secrets and Credentials
-secrets/
-*.pem
-*.key
+# Backup and Temporary Files
+*.backup
+*.tmp
+*.temp
+README.md.bak
 
 # macOS System Files
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Secrets and Credentials
+secrets/
+*.pem
+*.key
 
 # Kubernetes and Docker
 *.tar
