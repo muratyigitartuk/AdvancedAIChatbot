@@ -171,7 +171,10 @@ class UserProfileService:
         return message
 
     def add_bot_message(
-        self, conversation_id: int, content: str, message_metadata: Dict[str, Any] = None
+        self,
+        conversation_id: int,
+        content: str,
+        message_metadata: Dict[str, Any] = None,
     ) -> Message:
         """
         Add a bot message to a conversation.

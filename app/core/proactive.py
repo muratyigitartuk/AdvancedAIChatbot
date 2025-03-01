@@ -23,7 +23,11 @@ class ProactiveEngine:
         topic_frequency = {}
         for conv in history:
             for msg in conv["messages"]:
-                if msg["is_user"] and msg.get("message_metadata") and msg["message_metadata"].get("topics"):
+                if (
+                    msg["is_user"]
+                    and msg.get("message_metadata")
+                    and msg["message_metadata"].get("topics")
+                ):
                     for topic in msg["message_metadata"]["topics"]:
                         topic_frequency[topic] = topic_frequency.get(topic, 0) + 1
 

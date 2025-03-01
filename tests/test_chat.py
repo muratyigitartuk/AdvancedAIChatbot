@@ -47,9 +47,9 @@ def test_chat_endpoint(mock_ai_engine, client, test_user, test_user_token):
         json={
             "user_id": test_user.id,
             "message": "Hello, this is a test message",
-            "conversation_id": None  # New conversation
+            "conversation_id": None,  # New conversation
         },
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     if response.status_code != status.HTTP_200_OK:
@@ -91,9 +91,9 @@ def test_chat_with_existing_conversation(
         json={
             "user_id": test_user.id,
             "message": "This is a follow-up message",
-            "conversation_id": test_conversation.id
+            "conversation_id": test_conversation.id,
         },
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     if response.status_code != status.HTTP_200_OK:
@@ -113,7 +113,7 @@ def test_get_user_history(client, test_user, test_user_token, test_conversation)
     response = client.get(
         "/api/user/history",
         params={"user_id": test_user.id, "limit": 10},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     if response.status_code != status.HTTP_200_OK:
@@ -147,8 +147,8 @@ def test_get_recommendations(mock_ai_engine, client, test_user, test_user_token)
         {
             "message": "Would you like to learn about Y?",
             "confidence": 0.8,
-            "topic": "learning"
-        }
+            "topic": "learning",
+        },
     ]
     mock_instance.proactive_engine = mock_proactive
     mock_ai_engine.return_value = mock_instance
@@ -157,7 +157,7 @@ def test_get_recommendations(mock_ai_engine, client, test_user, test_user_token)
     response = client.get(
         "/api/recommendations",
         params={"user_id": test_user.id},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     if response.status_code != status.HTTP_200_OK:

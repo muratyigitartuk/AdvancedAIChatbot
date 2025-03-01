@@ -84,9 +84,7 @@ class ContextBuilder:
 
         return context
 
-    def _get_conversation_history(
-        self, conversation_id: int
-    ) -> List[Dict[str, Any]]:
+    def _get_conversation_history(self, conversation_id: int) -> List[Dict[str, Any]]:
         """
         Retrieve conversation history for the current conversation.
 
@@ -123,7 +121,7 @@ class ContextBuilder:
         # Sort by timestamp and take the most recent N messages
         messages.sort(key=lambda x: x["timestamp"])
 
-        return messages[-self.max_history_items:]
+        return messages[-self.max_history_items :]
 
     def _get_user_preferences(self, user_id: int) -> Dict[str, Any]:
         """
@@ -180,9 +178,7 @@ class ContextBuilder:
         if user_topics:
             context += "The user has shown interest in the following topics: "
             # Sort topics by weight, descending
-            sorted_topics = sorted(
-                user_topics, key=lambda x: x["weight"], reverse=True
-            )
+            sorted_topics = sorted(user_topics, key=lambda x: x["weight"], reverse=True)
             # Take top 5 topics
             top_topics = sorted_topics[:5]
             context += ", ".join([t["topic"] for t in top_topics]) + ". "

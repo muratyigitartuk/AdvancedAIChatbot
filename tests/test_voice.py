@@ -19,6 +19,7 @@ processing APIs, ensuring that the application correctly handles voice data
 conversion and related error cases. The tests validate both successful conversions
 and proper error handling for various scenarios.
 """
+
 import io
 from unittest.mock import patch, MagicMock
 from fastapi import status
@@ -43,7 +44,7 @@ def test_speech_to_text(mock_factory, client, test_user_token):
     response = client.post(
         "/api/voice/stt",
         files={"audio_file": ("test.wav", test_file, "audio/wav")},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     # Verify the response
@@ -78,7 +79,7 @@ def test_text_to_speech(mock_factory, client, test_user_token):
     response = client.post(
         "/api/voice/tts",
         json={"text": "Convert this text to speech", "voice_id": "en-US-1"},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     # Verify the response
@@ -114,7 +115,7 @@ def test_stt_invalid_file_type(mock_factory, client, test_user_token):
     response = client.post(
         "/api/voice/stt",
         files={"audio_file": ("test.txt", test_file, "text/plain")},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     # Verify the response
@@ -149,7 +150,7 @@ def test_tts_error_handling(mock_factory, client, test_user_token):
     response = client.post(
         "/api/voice/tts",
         json={"text": "This will cause an error", "voice_id": "en-US-1"},
-        headers={"Authorization": f"Bearer {test_user_token}"}
+        headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
     # Verify the response

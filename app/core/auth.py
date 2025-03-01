@@ -15,7 +15,6 @@ Environment variables:
 - JWT_ACCESS_TOKEN_EXPIRE_MINUTES: Token expiration time in minutes
 """
 
-
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 
@@ -40,13 +39,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 # JWT Configuration
 SECRET_KEY = os.getenv(
-    "JWT_SECRET_KEY",
-    "DO_NOT_USE_THIS_IN_PRODUCTION_REPLACE_IT_WITH_YOUR_SECRET"
+    "JWT_SECRET_KEY", "DO_NOT_USE_THIS_IN_PRODUCTION_REPLACE_IT_WITH_YOUR_SECRET"
 )
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(
-    os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30")
-)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 
 class AuthConfig:
@@ -105,9 +101,7 @@ class AuthConfig:
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(
-                minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-            )
+            expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

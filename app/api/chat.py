@@ -176,9 +176,7 @@ def chat(
         conversation_id = conversation.id
 
     # Process the message
-    result = ai_engine.process_input(
-        request.user_id, conversation_id, request.message
-    )
+    result = ai_engine.process_input(request.user_id, conversation_id, request.message)
 
     # Map from internal message_metadata to external API metadata
     return {
@@ -191,9 +189,7 @@ def chat(
 
 
 @router.get("/user/history", response_model=UserHistoryResponse)
-def get_user_history(
-    request: UserHistoryRequest, db: Session = Depends(get_db)
-):
+def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db)):
     """
     Retrieve conversation history for a user.
 
@@ -209,9 +205,7 @@ def get_user_history(
         UserHistoryResponse: The user's conversation history
     """
     user_profile_service = UserProfileService(db)
-    history = user_profile_service.get_user_history(
-        request.user_id, request.limit
-    )
+    history = user_profile_service.get_user_history(request.user_id, request.limit)
 
     return {"conversations": history}
 

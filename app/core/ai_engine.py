@@ -134,9 +134,7 @@ class AIEngine:
             )
 
         # Build context from user history
-        context = self.context_builder.build_context(
-            user_id, conversation_id, message
-        )
+        context = self.context_builder.build_context(user_id, conversation_id, message)
         # Start timing the response
         start_time = time.time()
 

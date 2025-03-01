@@ -31,7 +31,10 @@ def create_test_user(db: Session):
     test_user = User(
         username="test_user",
         email="test@example.com",
-        hashed_password=os.getenv("TEST_USER_PASSWORD", "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW"),  # "password"
+        hashed_password=os.getenv(
+            "TEST_USER_PASSWORD",
+            "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+        ),  # "password"
         full_name="Test User",
         is_active=True,
         preferences={"theme": "dark", "language": "en", "notification_level": "medium"},
