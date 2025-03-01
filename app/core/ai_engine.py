@@ -72,7 +72,8 @@ class AIEngine:
             self.entity_recognizer = pipeline("ner")
         except ImportError:
             print(
-                "Warning: Transformers library not available. Using dummy NLP components."
+                "Warning: Transformers library not available. "
+                "Using dummy NLP components."
             )
             # Create dummy NLP components for systems without transformers
             self.sentiment_analyzer = self._dummy_sentiment_analyzer
@@ -86,7 +87,6 @@ class AIEngine:
 
         Args:
             text (str): Input text for sentiment analysis
-
         Returns:
             List[Dict[str, Any]]: Sentiment analysis result
         """
@@ -101,7 +101,6 @@ class AIEngine:
 
         Args:
             text (str): Input text for entity recognition
-
         Returns:
             List[Dict[str, Any]]: Entity recognition result
         """
@@ -122,7 +121,6 @@ class AIEngine:
             user_id (int): Unique identifier for the user
             conversation_id (int): Unique identifier for the conversation
             message (str): User input message
-
         Returns:
             Dict[str, Any]: Response and metadata
         """
@@ -131,10 +129,14 @@ class AIEngine:
 
         # Update user topics based on extracted topics
         if message_metadata.get("topics"):
-            self.user_profile_service.update_user_topics(user_id, message_metadata["topics"])
+            self.user_profile_service.update_user_topics(
+                user_id, message_metadata["topics"]
+            )
 
         # Build context from user history
-        context = self.context_builder.build_context(user_id, conversation_id, message)
+        context = self.context_builder.build_context(
+            user_id, conversation_id, message
+        )
         # Start timing the response
         start_time = time.time()
 
@@ -156,10 +158,14 @@ class AIEngine:
         )
 
         # Add bot message to conversation
-        self.user_profile_service.add_bot_message(conversation_id, response, {
-            "response_time": time.time() - start_time,
-            "ai_model": self.model,
-        })
+        self.user_profile_service.add_bot_message(
+            conversation_id,
+            response,
+            {
+                "response_time": time.time() - start_time,
+                "ai_model": self.model,
+            },
+        )
 
         return {
             "response": response,
@@ -174,7 +180,6 @@ class AIEngine:
 
         Args:
             message (str): Input message for analysis
-
         Returns:
             Dict[str, Any]: Analysis result
         """
@@ -199,7 +204,6 @@ class AIEngine:
 
         Args:
             message (str): Input message for entity extraction
-
         Returns:
             List[Dict[str, Any]]: Extracted entities
         """
@@ -246,7 +250,6 @@ class AIEngine:
 
         Args:
             message (str): Input message for topic extraction
-
         Returns:
             List[str]: Extracted topics
         """
@@ -274,11 +277,11 @@ class AIEngine:
         """
         Generate response using AI model.
 
-        This method uses the OpenAI API to generate a response based on the input context.
+        This method uses the OpenAI API to generate a response based on the
+        input context.
 
         Args:
             context (str): Input context for response generation
-
         Returns:
             str: Generated response
         """
@@ -289,7 +292,8 @@ class AIEngine:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant that learns from user interactions.",
+                        "content": "You are a helpful assistant that learns "
+                        "from user interactions.",
                     },
                     {"role": "user", "content": context},
                 ],
@@ -301,4 +305,7 @@ class AIEngine:
         except Exception as e:
             print(f"Error generating response from OpenAI: {e}")
             # Fallback to a simple response
-            return "I'm sorry, I'm having trouble generating a response right now. Please try again later."
+            return (
+                "I'm sorry, I'm having trouble generating a response right now. "
+                "Please try again later."
+            )

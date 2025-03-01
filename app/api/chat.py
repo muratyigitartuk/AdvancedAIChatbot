@@ -10,7 +10,7 @@ The module defines Pydantic models for request/response validation and
 implements FastAPI route handlers for each endpoint.
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
@@ -31,7 +31,8 @@ class ChatRequest(BaseModel):
     Attributes:
         user_id (int): The ID of the user sending the message
         message (str): The content of the user's message
-        conversation_id (Optional[int]): The ID of the existing conversation, or None to create a new one
+        conversation_id (Optional[int]): The ID of the existing conversation,
+            or None to create a new one
     """
 
     user_id: int
@@ -45,8 +46,10 @@ class ChatResponse(BaseModel):
 
     Attributes:
         response (str): The AI-generated response text
-        metadata (Dict[str, Any]): Additional information about the response (sentiment, entities, etc.)
-        proactive_recommendation (Optional[str]): A proactive suggestion based on user history, if available
+        metadata (Dict[str, Any]): Additional information about the response
+            (sentiment, entities, etc.)
+        proactive_recommendation (Optional[str]): A proactive suggestion based
+            on user history, if available
         conversation_id (int): The ID of the conversation this message belongs to
     """
 
@@ -62,7 +65,8 @@ class UserHistoryRequest(BaseModel):
 
     Attributes:
         user_id (int): The ID of the user whose history to retrieve
-        limit (Optional[int]): Maximum number of conversations to return, defaults to 10
+        limit (Optional[int]): Maximum number of conversations to return,
+            defaults to 10
     """
 
     user_id: int
@@ -113,7 +117,8 @@ class RecommendationResponse(BaseModel):
     Response model for proactive recommendations.
 
     Attributes:
-        recommendations (List[Dict[str, Any]]): List of recommendations with their details
+        recommendations (List[Dict[str, Any]]): List of recommendations with
+            their details
     """
 
     recommendations: List[Dict[str, Any]]
@@ -148,12 +153,14 @@ def chat(
     """
     Process a chat message and return an AI-generated response.
 
-    This endpoint handles incoming user messages, processes them through the AI engine,
-    and returns the generated response along with metadata and any proactive recommendations.
-    If no conversation_id is provided, a new conversation will be created.
+    This endpoint handles incoming user messages, processes them through the AI
+    engine, and returns the generated response along with metadata and any
+    proactive recommendations. If no conversation_id is provided, a new
+    conversation will be created.
 
     Args:
-        request (ChatRequest): The chat request containing user ID, message, and optional conversation ID
+        request (ChatRequest): The chat request containing user ID, message,
+            and optional conversation ID
         ai_engine (AIEngine): The AI engine dependency for processing the message
         db (Session): Database session dependency
 
@@ -169,19 +176,24 @@ def chat(
         conversation_id = conversation.id
 
     # Process the message
-    result = ai_engine.process_input(request.user_id, conversation_id, request.message)
+    result = ai_engine.process_input(
+        request.user_id, conversation_id, request.message
+    )
 
     # Map from internal message_metadata to external API metadata
     return {
         "response": result["response"],
         "metadata": result["message_metadata"],
-        "proactive_recommendation": result.get("proactive_recommendation"),  # Use get() to handle None
+        # Use get() to handle None
+        "proactive_recommendation": result.get("proactive_recommendation"),
         "conversation_id": conversation_id,
     }
 
 
 @router.get("/user/history", response_model=UserHistoryResponse)
-def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db)):
+def get_user_history(
+    request: UserHistoryRequest, db: Session = Depends(get_db)
+):
     """
     Retrieve conversation history for a user.
 
@@ -189,14 +201,17 @@ def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db))
     the messages within each conversation, up to the specified limit.
 
     Args:
-        request (UserHistoryRequest): The request containing user ID and optional limit
+        request (UserHistoryRequest): The request containing user ID and
+            optional limit
         db (Session): Database session dependency
 
     Returns:
         UserHistoryResponse: The user's conversation history
     """
     user_profile_service = UserProfileService(db)
-    history = user_profile_service.get_user_history(request.user_id, request.limit)
+    history = user_profile_service.get_user_history(
+        request.user_id, request.limit
+    )
 
     return {"conversations": history}
 
@@ -213,7 +228,8 @@ def get_recommendations(
 
     Args:
         request (RecommendationRequest): The request containing the user ID
-        ai_engine (AIEngine): The AI engine dependency for generating recommendations
+        ai_engine (AIEngine): The AI engine dependency for generating
+            recommendations
 
     Returns:
         RecommendationResponse: A list of proactive recommendations
