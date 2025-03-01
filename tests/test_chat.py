@@ -72,9 +72,7 @@ def test_chat_endpoint(mock_ai_engine, client, test_user, test_user_token):
 
 
 @patch("app.api.chat.AIEngine")
-def test_chat_with_existing_conversation(
-    mock_ai_engine, client, test_user, test_user_token, test_conversation
-):
+def test_chat_with_existing_conversation(mock_ai_engine, client, test_user, test_user_token, test_conversation):
     """Test chat endpoint with an existing conversation."""
     # Configure the mock
     mock_instance = MagicMock()

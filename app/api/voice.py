@@ -77,9 +77,7 @@ def get_tts_service():
 
 
 @router.post("/stt", response_model=STTResponse)
-async def speech_to_text(
-    audio_file: UploadFile = File(...), stt_service=Depends(get_stt_service)
-):
+async def speech_to_text(audio_file: UploadFile = File(...), stt_service=Depends(get_stt_service)):
     """
     Convert speech to text.
 
@@ -98,9 +96,7 @@ async def speech_to_text(
     """
     # Validate file type
     if not audio_file.content_type.startswith("audio/"):
-        raise HTTPException(
-            status_code=400, detail="Invalid file type. Please upload an audio file."
-        )
+        raise HTTPException(status_code=400, detail="Invalid file type. Please upload an audio file.")
 
     try:
         # Process the audio file
@@ -136,6 +132,4 @@ async def text_to_speech(request: TTSRequest, tts_service=Depends(get_tts_servic
         # Return audio file
         return Response(content=audio_content, media_type="audio/mpeg")
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Error generating speech: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Error generating speech: {str(e)}")

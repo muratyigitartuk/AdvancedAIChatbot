@@ -83,9 +83,7 @@ def test_text_to_speech(mock_factory, client, test_user_token):
         raise AssertionError("Expected status code 200 OK")
 
     # Check that our mock was called with the right parameters
-    mock_tts.synthesize.assert_called_once_with(
-        "Convert this text to speech", "en-US-1"
-    )
+    mock_tts.synthesize.assert_called_once_with("Convert this text to speech", "en-US-1")
 
     # Verify the response content
     if response.content != b"fake audio data":

@@ -126,9 +126,7 @@ def test_login_wrong_password(client, test_user):
 
 def test_get_current_user(client, test_user_token):
     """Test getting current user profile."""
-    response = client.get(
-        "/api/auth/me", headers={"Authorization": f"Bearer {test_user_token}"}
-    )
+    response = client.get("/api/auth/me", headers={"Authorization": f"Bearer {test_user_token}"})
     if response.status_code != status.HTTP_200_OK:
         raise AssertionError("Expected status code 200 OK")
     data = response.json()
@@ -142,9 +140,7 @@ def test_get_current_user(client, test_user_token):
 
 def test_get_current_user_invalid_token(client):
     """Test getting current user with invalid token."""
-    response = client.get(
-        "/api/auth/me", headers={"Authorization": "Bearer invalid_token"}
-    )
+    response = client.get("/api/auth/me", headers={"Authorization": "Bearer invalid_token"})
     if response.status_code != status.HTTP_401_UNAUTHORIZED:
         raise AssertionError("Expected status code 401 Unauthorized")
     error_detail = response.json()["detail"]

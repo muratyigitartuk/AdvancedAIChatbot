@@ -51,9 +51,7 @@ class ContextBuilder:
         self.max_history_items = max_history_items
         self.max_tokens = max_tokens
 
-    def build_context(
-        self, user_id: int, conversation_id: int, current_message: str
-    ) -> str:
+    def build_context(self, user_id: int, conversation_id: int, current_message: str) -> str:
         """
         Build a complete context for AI response generation.
 
@@ -78,9 +76,7 @@ class ContextBuilder:
         user_preferences = self._get_user_preferences(user_id)
 
         # Create context prompt
-        context = self._format_context(
-            current_message, conversation_history, user_topics, user_preferences
-        )
+        context = self._format_context(current_message, conversation_history, user_topics, user_preferences)
 
         return context
 
@@ -99,9 +95,7 @@ class ContextBuilder:
 
         # Get the conversation
         conversation = (
-            self.user_profile_service.db.query(Conversation)
-            .filter(Conversation.id == conversation_id)
-            .first()
+            self.user_profile_service.db.query(Conversation).filter(Conversation.id == conversation_id).first()
         )
 
         if not conversation:

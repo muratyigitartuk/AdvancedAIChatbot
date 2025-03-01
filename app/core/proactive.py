@@ -23,11 +23,7 @@ class ProactiveEngine:
         topic_frequency = {}
         for conv in history:
             for msg in conv["messages"]:
-                if (
-                    msg["is_user"]
-                    and msg.get("message_metadata")
-                    and msg["message_metadata"].get("topics")
-                ):
+                if msg["is_user"] and msg.get("message_metadata") and msg["message_metadata"].get("topics"):
                     for topic in msg["message_metadata"]["topics"]:
                         topic_frequency[topic] = topic_frequency.get(topic, 0) + 1
 
@@ -81,9 +77,7 @@ class ProactiveEngine:
     def should_send_recommendation(self, user_id: int) -> bool:
         """Determine if we should send a proactive recommendation now"""
         # Get user preferences
-        user = (
-            self.user_profile_service.db.query(User).filter(User.id == user_id).first()
-        )
+        user = self.user_profile_service.db.query(User).filter(User.id == user_id).first()
         if not user:
             return False
 

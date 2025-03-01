@@ -150,12 +150,7 @@ def create_user(db: Session, user: UserCreate) -> UserResponse:
     db.commit()
     db.refresh(db_user)
 
-    return UserResponse(
-        id=db_user.id,
-        username=db_user.username,
-        email=db_user.email,
-        full_name=db_user.full_name
-    )
+    return UserResponse(id=db_user.id, username=db_user.username, email=db_user.email, full_name=db_user.full_name)
 
 
 @router.post(
@@ -225,9 +220,7 @@ async def login(
     user = get_user_by_username(db, form_data.username)
 
     # Check if user exists and password is correct
-    if not user or not AuthConfig.verify_password(
-        form_data.password, user.hashed_password
-    ):
+    if not user or not AuthConfig.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -236,15 +229,11 @@ async def login(
 
     # Check if user is active
     if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
 
     # Create access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = AuthConfig.create_access_token(
-        data={"sub": str(user.id)}, expires_delta=access_token_expires
-    )
+    access_token = AuthConfig.create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
 
     # Return token and user info
     return {
@@ -269,8 +258,5 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
         UserResponse: User profile information
     """
     return UserResponse(
-        id=current_user.id,
-        username=current_user.username,
-        email=current_user.email,
-        full_name=current_user.full_name
+        id=current_user.id, username=current_user.username, email=current_user.email, full_name=current_user.full_name
     )

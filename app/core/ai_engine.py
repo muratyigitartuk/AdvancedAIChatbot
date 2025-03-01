@@ -71,10 +71,7 @@ class AIEngine:
             # Initialize entity recognition pipeline
             self.entity_recognizer = pipeline("ner")
         except ImportError:
-            print(
-                "Warning: Transformers library not available. "
-                "Using dummy NLP components."
-            )
+            print("Warning: Transformers library not available. " "Using dummy NLP components.")
             # Create dummy NLP components for systems without transformers
             self.sentiment_analyzer = self._dummy_sentiment_analyzer
             self.entity_recognizer = self._dummy_entity_recognizer
@@ -107,9 +104,7 @@ class AIEngine:
         # Return empty entities list
         return []
 
-    def process_input(
-        self, user_id: int, conversation_id: int, message: str
-    ) -> Dict[str, Any]:
+    def process_input(self, user_id: int, conversation_id: int, message: str) -> Dict[str, Any]:
         """
         Process user input and generate a response.
 
@@ -129,9 +124,7 @@ class AIEngine:
 
         # Update user topics based on extracted topics
         if message_metadata.get("topics"):
-            self.user_profile_service.update_user_topics(
-                user_id, message_metadata["topics"]
-            )
+            self.user_profile_service.update_user_topics(user_id, message_metadata["topics"])
 
         # Build context from user history
         context = self.context_builder.build_context(user_id, conversation_id, message)
@@ -143,17 +136,13 @@ class AIEngine:
 
         # Check for proactive recommendations
         proactive_recommendation = None
-        if self.proactive_engine and self.proactive_engine.should_send_recommendation(
-            user_id
-        ):
+        if self.proactive_engine and self.proactive_engine.should_send_recommendation(user_id):
             recommendations = self.proactive_engine.generate_recommendations(user_id)
             if recommendations:
                 proactive_recommendation = recommendations[0]["message"]
 
         # Add user message to conversation
-        self.user_profile_service.add_user_message(
-            user_id, conversation_id, message, message_metadata
-        )
+        self.user_profile_service.add_user_message(user_id, conversation_id, message, message_metadata)
 
         # Add bot message to conversation
         self.user_profile_service.add_bot_message(
@@ -290,8 +279,7 @@ class AIEngine:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant that learns "
-                        "from user interactions.",
+                        "content": "You are a helpful assistant that learns " "from user interactions.",
                     },
                     {"role": "user", "content": context},
                 ],
@@ -303,7 +291,4 @@ class AIEngine:
         except Exception as e:
             print(f"Error generating response from OpenAI: {e}")
             # Fallback to a simple response
-            return (
-                "I'm sorry, I'm having trouble generating a response right now. "
-                "Please try again later."
-            )
+            return "I'm sorry, I'm having trouble generating a response right now. " "Please try again later."

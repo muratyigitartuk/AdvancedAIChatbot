@@ -63,10 +63,7 @@ class UserProfileService:
         result = []
         for conv in conversations:
             messages = (
-                self.db.query(Message)
-                .filter(Message.conversation_id == conv.id)
-                .order_by(Message.created_at)
-                .all()
+                self.db.query(Message).filter(Message.conversation_id == conv.id).order_by(Message.created_at).all()
             )
 
             result.append(
@@ -119,9 +116,7 @@ class UserProfileService:
             for topic in topics
         ]
 
-    def update_user_preferences(
-        self, user_id: int, preferences: Dict[str, Any]
-    ) -> None:
+    def update_user_preferences(self, user_id: int, preferences: Dict[str, Any]) -> None:
         """
         Update user preferences.
 
@@ -215,8 +210,7 @@ class UserProfileService:
         """
         conversation = Conversation(
             user_id=user_id,
-            title=title
-            or f"Conversation {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
+            title=title or f"Conversation {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
         )
         self.db.add(conversation)
         self.db.commit()
@@ -236,11 +230,7 @@ class UserProfileService:
         """
         for topic_name in detected_topics:
             # Check if topic already exists
-            topic = (
-                self.db.query(UserTopic)
-                .filter(UserTopic.user_id == user_id, UserTopic.topic == topic_name)
-                .first()
-            )
+            topic = self.db.query(UserTopic).filter(UserTopic.user_id == user_id, UserTopic.topic == topic_name).first()
 
             if topic:
                 # Update existing topic

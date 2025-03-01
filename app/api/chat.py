@@ -211,9 +211,7 @@ def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db))
 
 
 @router.post("/recommendations", response_model=RecommendationResponse)
-def get_recommendations(
-    request: RecommendationRequest, ai_engine: AIEngine = Depends(get_ai_engine)
-):
+def get_recommendations(request: RecommendationRequest, ai_engine: AIEngine = Depends(get_ai_engine)):
     """
     Generate proactive recommendations for a user.
 
@@ -228,8 +226,6 @@ def get_recommendations(
     Returns:
         RecommendationResponse: A list of proactive recommendations
     """
-    recommendations = ai_engine.proactive_engine.generate_recommendations(
-        request.user_id
-    )
+    recommendations = ai_engine.proactive_engine.generate_recommendations(request.user_id)
 
     return {"recommendations": recommendations}

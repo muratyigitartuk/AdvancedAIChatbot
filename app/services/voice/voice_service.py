@@ -64,7 +64,7 @@ class VoiceService(ABC):
             bytes: Binary audio data
         """
         pass
-        
+
     @abstractmethod
     def text_to_speech(self, text: str, voice_id: Optional[str] = None) -> bytes:
         """
@@ -106,9 +106,7 @@ class WhisperSTTService(VoiceService):
 
             self.model = whisper.load_model(model_name)
         except ImportError:
-            raise ImportError(
-                "Whisper package is not installed. Please install it with 'pip install openai-whisper'."
-            )
+            raise ImportError("Whisper package is not installed. Please install it with 'pip install openai-whisper'.")
 
     def speech_to_text(self, audio_file: BinaryIO) -> str:
         """
@@ -133,7 +131,7 @@ class WhisperSTTService(VoiceService):
             # Clean up temporary file
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                
+
     # Alias for compatibility with tests
     transcribe = speech_to_text
 
@@ -248,9 +246,7 @@ class VoiceServiceFactory:
     """
 
     @staticmethod
-    def create_stt_service(
-        provider: str = "whisper", config: Dict = None
-    ) -> VoiceService:
+    def create_stt_service(provider: str = "whisper", config: Dict = None) -> VoiceService:
         """
         Create a Speech-to-Text service instance.
 
@@ -273,9 +269,7 @@ class VoiceServiceFactory:
             raise ValueError(f"Unsupported STT provider: {provider}")
 
     @staticmethod
-    def create_tts_service(
-        provider: str = "elevenlabs", config: Dict = None
-    ) -> VoiceService:
+    def create_tts_service(provider: str = "elevenlabs", config: Dict = None) -> VoiceService:
         """
         Create a Text-to-Speech service instance.
 
