@@ -22,10 +22,8 @@ test results, while validating that the API endpoints correctly process and
 return chat-related data.
 """
 
-import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import status
-from app.core.ai_engine import AIEngine
 
 
 @patch("app.api.chat.AIEngine")
