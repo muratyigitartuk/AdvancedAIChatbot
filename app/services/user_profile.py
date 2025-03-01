@@ -73,7 +73,7 @@ class UserProfileService:
                 {
                     "id": conv.id,
                     "title": conv.title,
-                    "created_at": conv.created_at,
+                    "created_at": conv.created_at.isoformat(),
                     "messages": [
                         {
                             "id": msg.id,

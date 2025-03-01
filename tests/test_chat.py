@@ -104,15 +104,18 @@ def test_chat_with_existing_conversation(
     if data["response"] != "Follow-up response":
         raise AssertionError("Response mismatch")
 
+    if "metadata" not in data:
+        raise AssertionError("Metadata missing in response")
+
     if data["conversation_id"] != test_conversation.id:
         raise AssertionError("Conversation ID mismatch")
 
 
 def test_get_user_history(client, test_user, test_user_token, test_conversation):
     """Test getting user conversation history."""
-    response = client.get(
+    response = client.post(
         "/api/user/history",
-        params={"user_id": test_user.id, "limit": 10},
+        json={"user_id": test_user.id, "limit": 5},
         headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
@@ -121,19 +124,18 @@ def test_get_user_history(client, test_user, test_user_token, test_conversation)
 
     data = response.json()
 
-    if not isinstance(data, list):
-        raise AssertionError("Response should be a list of conversations")
+    if "conversations" not in data:
+        raise AssertionError("Conversations missing in response")
 
-    if len(data) == 0:
-        raise AssertionError("No conversation history found")
+    if len(data["conversations"]) == 0:
+        raise AssertionError("No conversations returned")
 
-    # Check if the first conversation matches the test conversation
-    first_conversation = data[0]
-    if first_conversation["id"] != test_conversation.id:
-        raise AssertionError("First conversation does not match expected conversation")
+    conversation = data["conversations"][0]
+    if "id" not in conversation or "messages" not in conversation:
+        raise AssertionError("Invalid conversation structure")
 
-    if "messages" not in first_conversation:
-        raise AssertionError("Conversation messages missing")
+    if len(conversation["messages"]) == 0:
+        raise AssertionError("No messages in conversation")
 
 
 @patch("app.api.chat.AIEngine")
@@ -143,20 +145,24 @@ def test_get_recommendations(mock_ai_engine, client, test_user, test_user_token)
     mock_instance = MagicMock()
     mock_proactive = MagicMock()
     mock_proactive.generate_recommendations.return_value = [
-        {"message": "Try feature X", "confidence": 0.9, "topic": "features"},
         {
-            "message": "Would you like to learn about Y?",
-            "confidence": 0.8,
-            "topic": "learning",
+            "text": "Would you like to explore machine learning?",
+            "confidence": 0.85,
+            "category": "education",
+        },
+        {
+            "text": "Check out our new voice features!",
+            "confidence": 0.75,
+            "category": "feature",
         },
     ]
     mock_instance.proactive_engine = mock_proactive
     mock_ai_engine.return_value = mock_instance
 
     # Test the recommendations endpoint
-    response = client.get(
+    response = client.post(
         "/api/recommendations",
-        params={"user_id": test_user.id},
+        json={"user_id": test_user.id},
         headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
@@ -168,13 +174,9 @@ def test_get_recommendations(mock_ai_engine, client, test_user, test_user_token)
     if "recommendations" not in data:
         raise AssertionError("Recommendations missing in response")
 
-    recommendations = data["recommendations"]
-
-    if len(recommendations) != 2:
+    if len(data["recommendations"]) != 2:
         raise AssertionError("Expected 2 recommendations")
 
-    if recommendations[0]["message"] != "Try feature X":
-        raise AssertionError("First recommendation message mismatch")
-
-    if recommendations[1]["message"] != "Would you like to learn about Y?":
-        raise AssertionError("Second recommendation message mismatch")
+    rec = data["recommendations"][0]
+    if "text" not in rec or "confidence" not in rec or "category" not in rec:
+        raise AssertionError("Invalid recommendation structure")

@@ -40,8 +40,8 @@ def test_register_user(client):
             "full_name": "New User",
         },
     )
-    if response.status_code != status.HTTP_200_OK:
-        raise AssertionError("Expected status code 200 OK")
+    if response.status_code != status.HTTP_201_CREATED:
+        raise AssertionError("Expected status code 201 Created")
     data = response.json()
     if data["username"] != "newuser":
         raise AssertionError("Username mismatch")

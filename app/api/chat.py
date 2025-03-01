@@ -181,14 +181,14 @@ def chat(
     # Map from internal message_metadata to external API metadata
     return {
         "response": result["response"],
-        "metadata": result["message_metadata"],
+        "metadata": result.get("message_metadata", {}),
         # Use get() to handle None
         "proactive_recommendation": result.get("proactive_recommendation"),
         "conversation_id": conversation_id,
     }
 
 
-@router.get("/user/history", response_model=UserHistoryResponse)
+@router.post("/user/history", response_model=UserHistoryResponse)
 def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db)):
     """
     Retrieve conversation history for a user.
@@ -210,7 +210,7 @@ def get_user_history(request: UserHistoryRequest, db: Session = Depends(get_db))
     return {"conversations": history}
 
 
-@router.get("/recommendations", response_model=RecommendationResponse)
+@router.post("/recommendations", response_model=RecommendationResponse)
 def get_recommendations(
     request: RecommendationRequest, ai_engine: AIEngine = Depends(get_ai_engine)
 ):

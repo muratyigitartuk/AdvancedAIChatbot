@@ -39,9 +39,36 @@ class VoiceService(ABC):
         pass
 
     @abstractmethod
-    def text_to_speech(self, text: str, voice_id: Optional[str] = None) -> bytes:
+    def transcribe(self, audio_file: BinaryIO) -> str:
+        """
+        Convert speech audio to text (alias for speech_to_text).
+
+        Args:
+            audio_file (BinaryIO): Binary audio file content
+
+        Returns:
+            str: Transcribed text from the audio
+        """
+        pass
+
+    @abstractmethod
+    def synthesize(self, text: str, voice_id: Optional[str] = None) -> bytes:
         """
         Convert text to speech audio.
+
+        Args:
+            text (str): Text to convert to speech
+            voice_id (Optional[str], optional): Voice identifier. Defaults to None.
+
+        Returns:
+            bytes: Binary audio data
+        """
+        pass
+        
+    @abstractmethod
+    def text_to_speech(self, text: str, voice_id: Optional[str] = None) -> bytes:
+        """
+        Convert text to speech audio (alias for synthesize).
 
         Args:
             text (str): Text to convert to speech
@@ -99,13 +126,25 @@ class WhisperSTTService(VoiceService):
             temp.write(audio_file.read())
 
         try:
-            # Process with Whisper
+            # Transcribe audio
             result = self.model.transcribe(temp_path)
-            return result["text"]
+            return result["text"].strip()
         finally:
-            # Clean up temp file
+            # Clean up temporary file
             if os.path.exists(temp_path):
                 os.remove(temp_path)
+                
+    # Alias for compatibility with tests
+    transcribe = speech_to_text
+
+    def synthesize(self, text: str, voice_id: Optional[str] = None) -> bytes:
+        """
+        Not implemented for Whisper service.
+
+        Raises:
+            NotImplementedError: This service only supports speech-to-text
+        """
+        raise NotImplementedError("Whisper service only supports speech-to-text")
 
     def text_to_speech(self, text: str, voice_id: Optional[str] = None) -> bytes:
         """
@@ -114,7 +153,7 @@ class WhisperSTTService(VoiceService):
         Raises:
             NotImplementedError: This service only supports speech-to-text
         """
-        raise NotImplementedError("Whisper service only supports speech-to-text")
+        return self.synthesize(text, voice_id)
 
 
 class ElevenLabsTTSService(VoiceService):
@@ -137,7 +176,7 @@ class ElevenLabsTTSService(VoiceService):
         """
         self.api_key = api_key
 
-    def text_to_speech(self, text: str, voice_id: Optional[str] = None) -> bytes:
+    def synthesize(self, text: str, voice_id: Optional[str] = None) -> bytes:
         """
         Convert text to speech using ElevenLabs API.
 
@@ -178,7 +217,19 @@ class ElevenLabsTTSService(VoiceService):
         else:
             raise Exception(f"ElevenLabs API error: {response.text}")
 
+    # Alias for backward compatibility
+    text_to_speech = synthesize
+
     def speech_to_text(self, audio_file: BinaryIO) -> str:
+        """
+        Not implemented for ElevenLabs service.
+
+        Raises:
+            NotImplementedError: This service only supports text-to-speech
+        """
+        raise NotImplementedError("ElevenLabs service only supports text-to-speech")
+
+    def transcribe(self, audio_file: BinaryIO) -> str:
         """
         Not implemented for ElevenLabs service.
 

@@ -121,7 +121,7 @@ def get_user_by_email(db: Session, email: str) -> Optional[User]:
     return db.query(User).filter(User.email == email).first()
 
 
-def create_user(db: Session, user: UserCreate) -> User:
+def create_user(db: Session, user: UserCreate) -> UserResponse:
     """
     Create a new user in the database.
 
@@ -130,7 +130,7 @@ def create_user(db: Session, user: UserCreate) -> User:
         user (UserCreate): User data for creation
 
     Returns:
-        User: The newly created user object
+        UserResponse: The newly created user data (without password)
     """
     # Hash the password
     hashed_password = AuthConfig.get_password_hash(user.password)
@@ -150,7 +150,12 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
 
-    return db_user
+    return UserResponse(
+        id=db_user.id,
+        username=db_user.username,
+        email=db_user.email,
+        full_name=db_user.full_name
+    )
 
 
 @router.post(
@@ -263,4 +268,9 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
     Returns:
         UserResponse: User profile information
     """
-    return current_user
+    return UserResponse(
+        id=current_user.id,
+        username=current_user.username,
+        email=current_user.email,
+        full_name=current_user.full_name
+    )

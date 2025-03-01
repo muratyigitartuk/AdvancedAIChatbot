@@ -104,7 +104,7 @@ async def speech_to_text(
 
     try:
         # Process the audio file
-        text = stt_service.speech_to_text(audio_file.file)
+        text = stt_service.transcribe(audio_file.file)
 
         return {"text": text}
     except Exception as e:
@@ -131,7 +131,7 @@ async def text_to_speech(request: TTSRequest, tts_service=Depends(get_tts_servic
     """
     try:
         # Generate audio from text
-        audio_content = tts_service.text_to_speech(request.text, request.voice_id)
+        audio_content = tts_service.synthesize(request.text, request.voice_id)
 
         # Return audio file
         return Response(content=audio_content, media_type="audio/mpeg")

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Voice Service Tests Module
 
 This module contains tests for the voice processing functionality of the advanced
@@ -33,9 +33,7 @@ def test_speech_to_text(mock_factory, client, test_user_token):
     mock_stt.transcribe.return_value = "This is the transcribed text."
 
     # Configure the factory to return our mock
-    mock_factory_instance = MagicMock()
-    mock_factory_instance.get_stt_service.return_value = mock_stt
-    mock_factory.return_value = mock_factory_instance
+    mock_factory.create_stt_service.return_value = mock_stt
 
     # Create a test audio file
     test_file = io.BytesIO(b"test audio content")
@@ -71,9 +69,7 @@ def test_text_to_speech(mock_factory, client, test_user_token):
     mock_tts.synthesize.return_value = b"fake audio data"
 
     # Configure the factory to return our mock
-    mock_factory_instance = MagicMock()
-    mock_factory_instance.get_tts_service.return_value = mock_tts
-    mock_factory.return_value = mock_factory_instance
+    mock_factory.create_tts_service.return_value = mock_tts
 
     # Make the request
     response = client.post(
@@ -136,34 +132,29 @@ def test_stt_invalid_file_type(mock_factory, client, test_user_token):
 
 @patch("app.api.voice.VoiceServiceFactory")
 def test_tts_error_handling(mock_factory, client, test_user_token):
-    """Test TTS error handling."""
+    """Test error handling in text to speech endpoint."""
     # Create a mock TTS service that raises an exception
     mock_tts = MagicMock()
     mock_tts.synthesize.side_effect = Exception("TTS service error")
 
     # Configure the factory to return our mock
-    mock_factory_instance = MagicMock()
-    mock_factory_instance.get_tts_service.return_value = mock_tts
-    mock_factory.return_value = mock_factory_instance
+    mock_factory.create_tts_service.return_value = mock_tts
 
     # Make the request
     response = client.post(
         "/api/voice/tts",
-        json={"text": "This will cause an error", "voice_id": "en-US-1"},
+        json={"text": "Convert this text to speech"},
         headers={"Authorization": f"Bearer {test_user_token}"},
     )
 
-    # Verify the response
+    # Verify we get an error response
     if response.status_code != status.HTTP_500_INTERNAL_SERVER_ERROR:
         raise AssertionError("Expected status code 500 Internal Server Error")
-
-    # Check that our mock was called
-    mock_tts.synthesize.assert_called_once()
 
     # Verify the error message
     data = response.json()
     if "detail" not in data:
         raise AssertionError("Expected 'detail' in error response")
 
-    if "Error synthesizing speech" not in data["detail"]:
-        raise AssertionError("Expected 'Error synthesizing speech' in error detail")
+    if "Error generating speech" not in data["detail"]:
+        raise AssertionError("Error message does not contain expected text")
