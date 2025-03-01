@@ -24,9 +24,6 @@ from app.db.database import engine, Base
 # Load environment variables
 load_dotenv()
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
-
 # Initialize FastAPI app
 app = FastAPI(
     title="Advanced AI Chatbot",
@@ -89,6 +86,9 @@ if __name__ == "__main__":
     In production, the application should be run using a proper ASGI server.
     """
     import uvicorn
+
+    # Create database tables
+    Base.metadata.create_all(bind=engine)
 
     host = os.getenv("API_HOST", "127.0.0.1")
     port = int(os.getenv("API_PORT", 8000))

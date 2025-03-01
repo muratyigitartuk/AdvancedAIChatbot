@@ -22,9 +22,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.main import app
-from app.db.database import Base, get_db
-from app.db.models import User, Conversation, Message
+# Import from app.db.database instead of app.main to avoid circular imports
+from app.db.database import get_db
+from app.db.models import User, Conversation, Message, Base
 from app.core.auth import AuthConfig
 
 
@@ -58,6 +58,7 @@ def db_session():
 @pytest.fixture
 def client(db_session):
     """Create a FastAPI test client with database overrides."""
+    from app.main import app  # Import here to avoid circular imports
 
     def override_get_db():
         try:
