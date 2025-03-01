@@ -551,7 +551,7 @@ headers = {
 # Send a message to the chatbot
 def send_message(message, context_id=None):
     endpoint = f"{API_URL}/api/chat"
-    
+
     payload = {
         "message": message,
         "metadata": {
@@ -559,12 +559,12 @@ def send_message(message, context_id=None):
             "device_info": "Python/Script"
         }
     }
-    
+
     if context_id:
         payload["context_id"] = context_id
-    
+
     response = requests.post(endpoint, headers=headers, json=payload)
-    
+
     if response.status_code == 200:
         return response.json()
     else:
@@ -593,16 +593,16 @@ API_URL = "http://localhost:8000"
 # Register a new user
 def register_user(username, email, password, full_name):
     endpoint = f"{API_URL}/api/auth/register"
-    
+
     payload = {
         "username": username,
         "email": email,
         "password": password,
         "full_name": full_name
     }
-    
+
     response = requests.post(endpoint, json=payload)
-    
+
     if response.status_code == 201:
         print("User registered successfully!")
         return response.json()
@@ -614,14 +614,14 @@ def register_user(username, email, password, full_name):
 # Login and get token
 def login(username, password):
     endpoint = f"{API_URL}/api/auth/token"
-    
+
     payload = {
         "username": username,
         "password": password
     }
-    
+
     response = requests.post(endpoint, data=payload)
-    
+
     if response.status_code == 200:
         token_data = response.json()
         print("Login successful!")
@@ -669,9 +669,9 @@ const Chat = () => {
   // Send message to API
   const sendMessage = async (e) => {
     e.preventDefault();
-    
+
     if (!input.trim()) return;
-    
+
     // Add user message to chat
     const userMessage = {
       id: Date.now().toString(),
@@ -679,11 +679,11 @@ const Chat = () => {
       content: input,
       created_at: new Date().toISOString()
     };
-    
+
     setMessages([...messages, userMessage]);
     setInput('');
     setLoading(true);
-    
+
     try {
       const response = await axios.post(
         '/api/chat',
@@ -701,7 +701,7 @@ const Chat = () => {
           }
         }
       );
-      
+
       // Add AI response to chat
       const aiMessage = {
         id: response.data.id,
@@ -709,16 +709,16 @@ const Chat = () => {
         content: response.data.content,
         created_at: response.data.created_at
       };
-      
+
       setMessages(prev => [...prev, aiMessage]);
-      
+
       // Save context ID for conversation continuity
       if (response.data.context_id) {
         setContextId(response.data.context_id);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      
+
       // Add error message
       const errorMessage = {
         id: Date.now().toString(),
@@ -726,7 +726,7 @@ const Chat = () => {
         content: 'Sorry, there was an error processing your request.',
         created_at: new Date().toISOString()
       };
-      
+
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setLoading(false);
@@ -750,7 +750,7 @@ const Chat = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <form className="input-container" onSubmit={sendMessage}>
         <input
           type="text"

@@ -1,25 +1,25 @@
 /**
  * @module Chat
  * @description Main chat interface component for the AI chatbot application.
- * 
+ *
  * This component provides the primary user interface for interacting with the AI chatbot,
  * including:
  * - Text message input and submission
  * - Voice input recording and transcription
  * - Message history display
  * - Real-time conversation updates
- * 
+ *
  * The component manages the entire chat experience, handling API calls to the backend
  * for message processing, voice transcription, and conversation history.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Box, 
-  TextField, 
-  IconButton, 
-  Paper, 
-  Typography, 
+import {
+  Box,
+  TextField,
+  IconButton,
+  Paper,
+  Typography,
   CircularProgress,
   Avatar,
   Grid,
@@ -33,7 +33,7 @@ import axios from 'axios';
 
 /**
  * Chat component for the AI chatbot interface.
- * 
+ *
  * @component
  * @returns {JSX.Element} The chat interface component
  */
@@ -80,42 +80,42 @@ const Chat = () => {
 
   /**
    * Handles sending a text message to the AI chatbot.
-   * 
+   *
    * @param {Event} e - The form submission event.
    */
   const handleSendMessage = async (e) => {
     e?.preventDefault();
-    
+
     if (!input.trim()) return;
-    
+
     // Add user message to UI
     const userMessage = {
       content: input,
       role: 'user',
       timestamp: new Date().toISOString()
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setLoading(true);
-    
+
     try {
       // Send message to API
       const response = await axios.post('/api/chat/message', {
         message: input
       });
-      
+
       // Add AI response to UI
       const aiMessage = {
         content: response.data.response,
         role: 'assistant',
         timestamp: new Date().toISOString()
       };
-      
+
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
-      
+
       // Add error message
       const errorMessage = {
         content: 'Sorry, I encountered an error. Please try again.',
@@ -123,7 +123,7 @@ const Chat = () => {
         timestamp: new Date().toISOString(),
         error: true
       };
-      
+
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setLoading(false);
@@ -149,7 +149,7 @@ const Chat = () => {
         formData.append('audio', audioBlob);
 
         setLoading(true);
-        
+
         try {
           // Convert speech to text
           const response = await axios.post('/api/voice/transcribe', formData, {
@@ -159,28 +159,28 @@ const Chat = () => {
           if (response.data.text) {
             // Add transcribed message to chat
             setInput(response.data.text);
-            
+
             // Automatically send transcribed message
             const userMessage = {
               content: response.data.text,
               role: 'user',
               timestamp: new Date().toISOString()
             };
-            
+
             setMessages(prev => [...prev, userMessage]);
-            
+
             // Get AI response
             const aiResponse = await axios.post('/api/chat/message', {
               message: response.data.text
             });
-            
+
             // Add AI response to UI
             const aiMessage = {
               content: aiResponse.data.response,
               role: 'assistant',
               timestamp: new Date().toISOString()
             };
-            
+
             setMessages(prev => [...prev, aiMessage]);
           }
         } catch (error) {
@@ -212,7 +212,7 @@ const Chat = () => {
 
   /**
    * Formats a timestamp into a human-readable time string.
-   * 
+   *
    * @param {string} timestamp - The timestamp to format.
    * @returns {string} The formatted time string.
    */
@@ -224,19 +224,19 @@ const Chat = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Chat messages */}
-      <Box 
-        sx={{ 
-          flexGrow: 1, 
-          overflowY: 'auto', 
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
           p: 2,
           display: 'flex',
           flexDirection: 'column'
         }}
       >
         {messages.length === 0 ? (
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
             alignItems: 'center',
             height: '100%'
           }}>
@@ -260,7 +260,7 @@ const Chat = () => {
                     <Avatar sx={{ bgcolor: 'primary.main' }}>AI</Avatar>
                   </Grid>
                 )}
-                
+
                 <Grid item xs>
                   <Paper
                     elevation={1}
@@ -278,7 +278,7 @@ const Chat = () => {
                     </Typography>
                   </Paper>
                 </Grid>
-                
+
                 {message.role === 'user' && (
                   <Grid item>
                     <Avatar sx={{ bgcolor: 'secondary.main' }}>
@@ -292,15 +292,15 @@ const Chat = () => {
         )}
         <div ref={messagesEndRef} />
       </Box>
-      
+
       <Divider />
-      
+
       {/* Message input */}
-      <Box 
-        component="form" 
-        onSubmit={handleSendMessage} 
-        sx={{ 
-          p: 2, 
+      <Box
+        component="form"
+        onSubmit={handleSendMessage}
+        sx={{
+          p: 2,
           backgroundColor: 'background.paper',
           display: 'flex',
           alignItems: 'center'
@@ -315,18 +315,18 @@ const Chat = () => {
           disabled={loading || isRecording}
           sx={{ mr: 1 }}
         />
-        
-        <IconButton 
-          color="primary" 
+
+        <IconButton
+          color="primary"
           onClick={isRecording ? stopRecording : startRecording}
           disabled={loading}
         >
           {isRecording ? <StopIcon /> : <MicIcon />}
         </IconButton>
-        
-        <IconButton 
-          color="primary" 
-          type="submit" 
+
+        <IconButton
+          color="primary"
+          type="submit"
           disabled={!input.trim() || loading || isRecording}
         >
           {loading ? <CircularProgress size={24} /> : <SendIcon />}

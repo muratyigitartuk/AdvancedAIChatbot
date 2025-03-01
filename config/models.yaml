@@ -1,15 +1,15 @@
 models:
   default: gpt-3.5-turbo
   fallback: distilgpt2
-  
+
 embeddings:
   model: sentence-transformers/all-mpnet-base-v2
   dimensions: 768
-  
+
 context_window:
   max_history_items: 10
   max_tokens: 4000
-  
+
 classification:
   model: distilbert-base-uncased-finetuned-sst-2-english
   threshold: 0.75

@@ -1,24 +1,8 @@
 """
-Authentication Tests Module
+Authentication API tests.
 
-This module contains tests for the authentication functionality of the advanced
-AI chatbot application. It tests various authentication scenarios including:
-
-1. User Registration
-   - Successful registration with valid credentials
-   - Failed registration attempts with existing usernames or emails
-
-2. User Login
-   - Successful login with correct credentials
-   - Failed login attempts with incorrect passwords
-
-3. User Authentication
-   - Retrieving current user profile with valid token
-   - Handling invalid authentication tokens
-
-These tests ensure that the authentication system properly validates user
-credentials, manages user sessions, and protects user data with appropriate
-security measures.
+This module contains tests for the authentication endpoints, including
+user registration, login, and profile retrieval.
 """
 
 from fastapi import status

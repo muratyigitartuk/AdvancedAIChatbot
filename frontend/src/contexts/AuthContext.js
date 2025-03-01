@@ -1,13 +1,13 @@
 /**
  * @module AuthContext
  * @description Authentication context provider for the application.
- * 
+ *
  * This module provides authentication state management and functionality including:
  * - User login and registration
  * - Token management and validation
  * - User profile fetching
  * - Logout functionality
- * 
+ *
  * It uses JWT (JSON Web Tokens) for authentication and stores the token in localStorage
  * for persistent authentication across page refreshes.
  */
@@ -31,7 +31,7 @@ export const useAuth = () => useContext(AuthContext);
 /**
  * Authentication provider component that wraps the application and provides
  * authentication state and functionality to all child components.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to render
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         // Check if token is expired
         const decodedToken = jwt_decode(token);
         const currentTime = Date.now() / 1000;
-        
+
         if (decodedToken.exp > currentTime) {
           // Valid token
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   /**
    * Login function that sends a POST request to the API with the provided credentials.
    * Updates the user state and token storage on successful login.
-   * 
+   *
    * @param {string} username - Username for login
    * @param {string} password - Password for login
    * @returns {boolean} True on successful login, false otherwise
@@ -105,17 +105,17 @@ export const AuthProvider = ({ children }) => {
       const formData = new FormData();
       formData.append('username', username);
       formData.append('password', password);
-      
+
       const response = await axios.post('/api/auth/token', formData);
       const { access_token, token_type, user_id, username: userName } = response.data;
-      
+
       // Save token
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      
+
       // Fetch user data
       await fetchUserProfile();
-      
+
       return true;
     } catch (error) {
       console.error('Login error:', error);
@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
 
   /**
    * Register function that sends a POST request to the API with the provided user data.
-   * 
+   *
    * @param {Object} userData - User data for registration
    * @returns {boolean} True on successful registration, false otherwise
    */

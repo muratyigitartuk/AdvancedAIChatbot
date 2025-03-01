@@ -1,25 +1,8 @@
 """
-Chat Functionality Tests Module
+Chat API tests.
 
-This module contains tests for the chat functionality of the advanced AI chatbot
-application. It tests various chat-related features including:
-
-1. Chat Endpoint
-   - Processing new messages with mocked AI responses
-   - Handling messages in existing conversations
-   - Validating response formats and metadata
-
-2. Conversation History
-   - Retrieving user conversation history
-   - Verifying conversation structure and message content
-
-3. Proactive Recommendations
-   - Generating AI-powered recommendations based on user context
-   - Validating recommendation format and content
-
-These tests use mocked AI engine responses to ensure consistent and predictable
-test results, while validating that the API endpoints correctly process and
-return chat-related data.
+This module contains tests for the chat functionality, including
+conversation management and message handling.
 """
 
 from unittest.mock import patch, MagicMock

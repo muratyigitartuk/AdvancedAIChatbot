@@ -1,5 +1,5 @@
 """
-Test Configuration Module
+Test Configuration Module.
 
 This module provides test fixtures and configurations for the advanced AI chatbot
 application. It sets up an in-memory SQLite database for testing purposes and

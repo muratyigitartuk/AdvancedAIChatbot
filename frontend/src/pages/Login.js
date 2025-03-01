@@ -3,21 +3,21 @@
  * @description Authentication page that allows users to log into the application.
  * This component handles user authentication through a form interface and redirects
  * authenticated users to the home page. It also displays error messages if login fails.
- * 
+ *
  * @example
  * ```jsx
  * <Login />
  * ```
  */
 import React, { useState } from 'react';
-import { 
-  Container, 
-  Box, 
-  Typography, 
-  TextField, 
-  Button, 
-  Paper, 
-  Link, 
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Link,
   Alert,
   CircularProgress
 } from '@mui/material';
@@ -29,7 +29,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Authentication context for login functionality and error handling
   const { login, error } = useAuth();
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const success = await login(username, password);
       if (success) {
@@ -56,32 +56,32 @@ const Login = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box 
-        sx={{ 
-          mt: 8, 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center' 
+      <Box
+        sx={{
+          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
         }}
       >
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 4, 
-            width: '100%', 
-            borderRadius: 2 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            width: '100%',
+            borderRadius: 2
           }}
         >
           <Typography component="h1" variant="h4" align="center" sx={{ mb: 3 }}>
             AI Chatbot Login
           </Typography>
-          
+
           {error && (
             <Alert severity="error" sx={{ mb: 3 }}>
               {error}
             </Alert>
           )}
-          
+
           <Box component="form" onSubmit={handleSubmit}>
             <TextField
               margin="normal"
@@ -96,7 +96,7 @@ const Login = () => {
               onChange={(e) => setUsername(e.target.value)}
               disabled={isSubmitting}
             />
-            
+
             <TextField
               margin="normal"
               required
@@ -110,7 +110,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               disabled={isSubmitting}
             />
-            
+
             <Button
               type="submit"
               fullWidth
@@ -120,7 +120,7 @@ const Login = () => {
             >
               {isSubmitting ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
-            
+
             <Box sx={{ textAlign: 'center', mt: 2 }}>
               <Link component={RouterLink} to="/register" variant="body2">
                 {"Don't have an account? Sign up"}

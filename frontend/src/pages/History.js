@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  List, 
-  ListItem, 
+import {
+  Box,
+  Typography,
+  Paper,
+  List,
+  ListItem,
   ListItemText,
   ListItemButton,
   Divider,
@@ -64,13 +64,13 @@ const History = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Conversation History
       </Typography>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {error}
         </Alert>
       )}
-      
+
       <Paper elevation={2} sx={{ borderRadius: 2 }}>
         {conversations.length === 0 ? (
           <Box sx={{ p: 4, textAlign: 'center' }}>

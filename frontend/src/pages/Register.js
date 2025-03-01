@@ -1,26 +1,26 @@
 /**
  * @module Register
  * @description User registration component for the AI chatbot application.
- * 
+ *
  * This component provides a registration form for new users, including:
  * - Username, email, and password input fields
  * - Password confirmation and validation
  * - Form submission handling with error feedback
  * - Navigation to login page after successful registration
- * 
+ *
  * The component integrates with the AuthContext to handle the registration process
  * and display appropriate feedback to the user.
  */
 
 import React, { useState } from 'react';
-import { 
-  Container, 
-  Box, 
-  Typography, 
-  TextField, 
-  Button, 
-  Paper, 
-  Link, 
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Link,
   Alert,
   CircularProgress
 } from '@mui/material';
@@ -29,7 +29,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Register component for user registration.
- * 
+ *
  * @component
  * @returns {JSX.Element} The registration form component
  */
@@ -48,7 +48,7 @@ const Register = () => {
 
   /**
    * Handles form input changes and updates the form state.
-   * 
+   *
    * @param {Event} e - The input change event
    */
   const handleChange = (e) => {
@@ -61,12 +61,12 @@ const Register = () => {
 
   /**
    * Handles form submission, validates inputs, and calls the register function.
-   * 
+   *
    * @param {Event} e - The form submission event
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate passwords match
     if (formData.password !== confirmPassword) {
       setPasswordError('Passwords do not match');
@@ -74,9 +74,9 @@ const Register = () => {
     } else {
       setPasswordError('');
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       const success = await register(formData);
       if (success) {
@@ -90,32 +90,32 @@ const Register = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box 
-        sx={{ 
-          mt: 8, 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center' 
+      <Box
+        sx={{
+          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
         }}
       >
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 4, 
-            width: '100%', 
-            borderRadius: 2 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            width: '100%',
+            borderRadius: 2
           }}
         >
           <Typography component="h1" variant="h4" align="center" sx={{ mb: 3 }}>
             Create Account
           </Typography>
-          
+
           {error && (
             <Alert severity="error" sx={{ mb: 3 }}>
               {error}
             </Alert>
           )}
-          
+
           <Box component="form" onSubmit={handleSubmit}>
             <TextField
               margin="normal"
@@ -130,7 +130,7 @@ const Register = () => {
               onChange={handleChange}
               disabled={isSubmitting}
             />
-            
+
             <TextField
               margin="normal"
               required
@@ -144,7 +144,7 @@ const Register = () => {
               onChange={handleChange}
               disabled={isSubmitting}
             />
-            
+
             <TextField
               margin="normal"
               fullWidth
@@ -156,7 +156,7 @@ const Register = () => {
               onChange={handleChange}
               disabled={isSubmitting}
             />
-            
+
             <TextField
               margin="normal"
               required
@@ -170,7 +170,7 @@ const Register = () => {
               onChange={handleChange}
               disabled={isSubmitting}
             />
-            
+
             <TextField
               margin="normal"
               required
@@ -186,7 +186,7 @@ const Register = () => {
               error={!!passwordError}
               helperText={passwordError}
             />
-            
+
             <Button
               type="submit"
               fullWidth
@@ -196,7 +196,7 @@ const Register = () => {
             >
               {isSubmitting ? <CircularProgress size={24} /> : 'Register'}
             </Button>
-            
+
             <Box sx={{ textAlign: 'center', mt: 2 }}>
               <Link component={RouterLink} to="/login" variant="body2">
                 {"Already have an account? Sign in"}

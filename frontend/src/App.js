@@ -35,7 +35,7 @@ function App() {
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      
+
       {/* Protected routes */}
       <Route path="/" element={
         <ProtectedRoute>
@@ -44,7 +44,7 @@ function App() {
           </Layout>
         </ProtectedRoute>
       } />
-      
+
       <Route path="/history" element={
         <ProtectedRoute>
           <Layout>
@@ -52,7 +52,7 @@ function App() {
           </Layout>
         </ProtectedRoute>
       } />
-      
+
       {/* Fallback route */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

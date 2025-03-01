@@ -1,12 +1,12 @@
 /**
  * @module ThemeContext
  * @description Theme context provider for the application.
- * 
+ *
  * This module provides theme state management and functionality including:
  * - Light and dark theme switching
  * - Persistent theme preferences via localStorage
  * - Material-UI theme configuration
- * 
+ *
  * It wraps the Material-UI ThemeProvider to provide consistent theming
  * across the application.
  */
@@ -30,7 +30,7 @@ export const useTheme = () => useContext(ThemeContext);
 /**
  * Theme provider component that wraps the application and provides
  * theme state and functionality to all child components.
- * 
+ *
  * @component
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to render

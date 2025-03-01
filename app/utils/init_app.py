@@ -1,3 +1,9 @@
+"""Application initialization utilities.
+
+This module provides functions to initialize the application database,
+create test users, and set up sample data for development purposes.
+"""
+
 import os
 import yaml
 from sqlalchemy.orm import Session
@@ -7,20 +13,20 @@ import datetime
 
 
 def init_database():
-    """Initialize database tables"""
+    """Initialize database tables."""
     Base.metadata.create_all(bind=engine)
     print("Database tables created successfully!")
 
 
 def load_config(config_path):
-    """Load YAML configuration file"""
+    """Load YAML configuration file."""
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
     return config
 
 
 def create_test_user(db: Session):
-    """Create a test user for development purposes"""
+    """Create a test user for development purposes."""
     # Check if test user already exists
     test_user = db.query(User).filter(User.username == "test_user").first()
     if test_user:
@@ -88,7 +94,7 @@ def create_test_user(db: Session):
 
 
 def initialize_app():
-    """Initialize the application with required data"""
+    """Initialize the application with required data."""
     # Initialize database
     init_database()
 
