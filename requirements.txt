@@ -6,6 +6,7 @@ python-dotenv==1.0.0
 alembic==1.11.1
 redis==4.5.5
 pydantic==1.10.9
+email-validator==2.2.0
 # Transformers ve torch sürümlerini uyumlu hale getiriyorum
 transformers==4.30.2
 torch==2.0.1
