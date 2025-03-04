@@ -926,4 +926,4 @@ If you find a bug or have a feature request:
 3. Include steps to reproduce for bugs
 4. Add relevant labels
 
-Thank you for contributing to the Advanced AI Chatbot project!
+Thank you for contributing to the Advanced AI Chatbot project!!
